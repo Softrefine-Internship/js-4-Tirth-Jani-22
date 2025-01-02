@@ -1,0 +1,141 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --primary-color: #3b3f45;
+  --secondary-color: #1f2329;
+  --tertiary-color: #fdd25b;
+  --active-color: #3b3f45;
+  --button-color: #b98901;
+  --font-color: #b4bcc3;
+}
+html {
+  font-family: "Roboto", serif;
+  font-size: 16px;
+  color: var(--font-color);
+}
+body {
+  background-color: var(--primary-color);
+}
+.dashboard {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr 3.5fr;
+  height: 100vh;
+}
+.sideBar {
+  padding: 1rem;
+  background-color: var(--secondary-color);
+  display: flex;
+  flex-direction: column;
+}
+.logo {
+  text-decoration: none;
+  color: var(--tertiary-color);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+ul {
+  color: var(--tertiary-color);
+  list-style-type: none;
+}
+
+.active {
+  background-color: #797d82;
+}
+li {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+}
+
+li:hover {
+  background-color: var(--active-color);
+}
+svg {
+  height: 2rem;
+  width: 2rem;
+  margin-right: 1rem;
+}
+
+.add {
+  margin-top: auto;
+  align-self: center;
+  text-align: center;
+  width: 80%;
+  background-color: var(--button-color);
+  color: #262322;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 1rem 0;
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+}
+
+.add:hover {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+/* ------------------------------------------------------------------- */
+.dashboard-screen {
+  height: 100vh;
+  padding: 1rem;
+  background-color: var(--primary-color);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.part-1 {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 1rem;
+  gap: 1rem;
+}
+
+.currentMonth {
+  background-color: var(--secondary-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+.currentMonth-heading {
+  display: flex;
+  justify-content: space-between;
+}
+.currentMonth-content,
+.currentMonth-content2 {
+  display: flex;
+  align-items: baseline;
+}
+
+.currentMonth-total-amount {
+  margin-top: 0.5rem;
+  font-size: 2rem;
+}
+
+.spend-analysis {
+  padding: 2rem 0;
+  margin-top: auto;
+  background-color: var(--secondary-color);
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* --------------------------------------------------- */
+.hide {
+  display: none;
+}
