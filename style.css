@@ -161,6 +161,16 @@ body {
   height: 100vh;
 }
 
+
+button {
+background: none;
+border: none;
+padding: 0;
+font: inherit;
+color: inherit;
+cursor: pointer;
+}
+
 /* ---------------------POPUP------------------ */
 .container {
   position: absolute;

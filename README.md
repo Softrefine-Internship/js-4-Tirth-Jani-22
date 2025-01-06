@@ -24,7 +24,7 @@ Design and implement an intuitive and visually appealing UI for the Expense Trac
 
 5. Number and Date Handling: Utilize JavaScript's number and date objects to handle numeric calculations, format the expense date in a user-friendly manner, and display it in the table.
 
-6. Expense Categorization: Implement a feature to allow users to categorize their expenses. The drop-down menu for selecting the category should be populated dynamically based on the available categories. Expenses should be displayed according to their respective categories in the table.
+6. Expense Categorization: Implement a feature to allow users to categorize their expenses. The drop-down menu for selecting the category should be populated dynamically based on the available categories. Expenses should be disp   layed according to their respective categories in the table.
 
 ### Technology Stack
 

@@ -8,178 +8,20 @@ const expenditurePercentageThisMonthContainer = document.getElementById(
 );
 const addExpenseButon = document.getElementById("addExpense");
 const container = document.getElementById("container");
-const closeBtn = document.getElementById("close");
+const closeBtn = document.getElementsByClassName("close");
 const addBtn = document.getElementById("add");
+const editBtn = document.getElementById("edit");
 const input = document.getElementsByTagName("input");
 const select = document.getElementsByTagName("select");
+const editPopup = document.getElementById("editPopup");
+const addPopup = document.getElementById("addPopup");
 
 // ---------------------MODAL---------------------
 let count = 504;
-const transactions = [
-  {
-    id: 13,
-    date: new Date("2023-12-01"),
-    amount: 900,
-    category: "Bills",
-    description: "Electricity bill",
-  },
-  {
-    id: 14,
-    date: new Date("2023-06-18"),
-    amount: 750,
-    category: "Travel",
-    description: "Bus tickets to a neighboring city",
-  },
-  {
-    id: 15,
-    date: new Date("2024-02-01"),
-    amount: 1500,
-    category: "Medical",
-    description: "Car loan payment",
-  },
-  {
-    id: 16,
-    date: new Date("2023-04-22"),
-    amount: 450,
-    category: "Medical",
-    description: "Supermarket shopping",
-  },
-  {
-    id: 17,
-    date: new Date("2023-07-14"),
-    amount: 100,
-    category: "Others",
-    description: "Charity donation",
-  },
-  {
-    id: 18,
-    date: new Date("2023-02-28"),
-    amount: 300,
-    category: "Bills",
-    description: "Water bill payment",
-  },
-  {
-    id: 19,
-    date: new Date("2024-01-10"),
-    amount: 1200,
-    category: "Travel",
-    description: "Hotel stay booking",
-  },
-  {
-    id: 20,
-    date: new Date("2022-06-22"),
-    amount: 850,
-    category: "Debt",
-    description: "Student loan payment",
-  },
-  {
-    id: 21,
-    date: new Date("2025-01-5"),
-    amount: 500,
-    category: "Others",
-    description: "Flight tickets to Paris",
-  },
-  {
-    id: 22,
-    date: new Date("2025-01-03"),
-    amount: 300,
-    category: "Food",
-    description: "Lunch at a local café",
-  },
-  {
-    id: 23,
-    date: new Date("2025-01-01"),
-    amount: 600,
-    category: "Bills",
-    description: "Internet bill payment",
-  },
-  {
-    id: 24,
-    date: new Date("2025-01-02"),
-    amount: 1200,
-    category: "Debt",
-    description: "Credit card payment",
-  },
-  {
-    id: 25,
-    date: new Date("2024-01-01"),
-    amount: 150,
-    category: "Others",
-    description: "Charity donation",
-  },
-  {
-    id: 26,
-    date: new Date("2024-12-15"),
-    amount: 500,
-    category: "Travel",
-    description: "Hotel booking for business trip",
-  },
-  {
-    id: 27,
-    date: new Date("2024-07-01"),
-    amount: 700,
-    category: "Food",
-    description: "Weekly grocery shopping",
-  },
-  {
-    id: 35,
-    date: new Date("2025-01-01"),
-    amount: 500,
-    category: "Food",
-    description: "New Year's Day dinner",
-  },
-  {
-    id: 45,
-    date: new Date("2025-01-01"),
-    amount: 2000,
-    category: "Medical",
-    description: "New Year's Day dinner",
-  },
-  {
-    id: 36,
-    date: new Date("2025-01-02"),
-    amount: 800,
-    category: "Travel",
-    description: "Train tickets to a nearby city",
-  },
-  {
-    id: 37,
-    date: new Date("2025-01-04"),
-    amount: 350,
-    category: "Bills",
-    description: "Water bill payment",
-  },
-  {
-    id: 38,
-    date: new Date("2025-01-06"),
-    amount: 1200,
-    category: "Debt",
-    description: "Student loan payment",
-  },
-  {
-    id: 39,
-    date: new Date("2025-01-09"),
-    amount: 150,
-    category: "Others",
-    description: "Donation to a charity",
-  },
-  {
-    id: 40,
-    date: new Date("2025-01-11"),
-    amount: 700,
-    category: "Food",
-    description: "Groceries for the week",
-  },
-  {
-    id: 41,
-    date: new Date("2025-01-15"),
-    amount: 2200,
-    category: "Travel",
-    description: "Booking for international trip",
-  },
-];
-transactions.sort((a, b) => b.date - a.date);
 
+let transactions = JSON.parse(localStorage.getItem("transactions"));
+
+transactions.sort((a, b) => b.date - a.date);
 addBtn.addEventListener("click", function () {
   let date = new Date(input[1].value);
   let amount = input[2].value;
@@ -231,17 +73,33 @@ container.addEventListener("click", function (e) {
     container.classList.add("hide");
   }
 });
-closeBtn.addEventListener("click", function (e) {
+// closeBtn.forEach((e) => {
+closeBtn[0].addEventListener("click", function (e) {
   container.classList.add("hide");
+  addPopup.classList.add("hide");
+  editPopup.classList.add("hide");
 });
+
+closeBtn[1].addEventListener("click", function (e) {
+  container.classList.add("hide");
+  addPopup.classList.add("hide");
+  editPopup.classList.add("hide");
+});
+
+// });
+// console.log(closeBtn[0]);
+
 addExpenseButon.addEventListener("click", function () {
   container.classList.remove("hide");
+  addPopup.classList.remove("hide");
 });
 function addTransactionDOM(transaction) {
   const item = document.createElement("div");
   item.innerHTML = `
   <div class="transaction-tile">
-        <div class="leading-icon">
+        <button class="leading-icon" onclick="editTransaction(${
+          transaction.id
+        })" >
                 <svg
                   class="leading-icon-svg"
                   xmlns="http://www.w3.org/2000/svg"
@@ -253,7 +111,7 @@ function addTransactionDOM(transaction) {
                     d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z"
                   />
                 </svg>
-              </div>
+              </button>
               <div class="transaction-tile-content">
                 <div class="transaction-tile-content-title">
                   <div class="transaction-tile-content-title-date">
@@ -324,17 +182,83 @@ const helper = {
   food: 0,
   others: 0,
 };
+
 transactions.forEach(function (transaction) {
   if (
-    transaction.date.getMonth() === new Date().getMonth() &&
-    transaction.date.getFullYear() === new Date().getFullYear()
+    new Date(transaction.date).getMonth() === new Date().getMonth() &&
+    new Date(transaction.date).getFullYear() === new Date().getFullYear()
   ) {
     helper[transaction.category.toLowerCase()] += transaction.amount;
   }
   addTransactionDOM(transaction);
 });
+let idToBeChanged = 0;
+const editTransaction = function (a) {
+  container.classList.remove("hide");
+  editPopup.classList.remove("hide");
+  const t = transactions.map((e) => {
+    if (e.id === a) {
+      input[3].value = e.description;
+      input[5].value = e.amount;
+      input[4].value = new Date(e.date).toISOString().slice(0, 10);
+      select[1].value = e.category;
+      idToBeChanged = e.id;
+      if (
+        e.date.getMonth() === new Date().getMonth() &&
+        e.date.getFullYear() === new Date().getFullYear()
+      ) {
+        helper[e.category.toLowerCase()] -= e.amount;
+      }
+    }
+  });
+};
+editBtn.addEventListener("click", function () {
+  let date = new Date(input[4].value);
+  let amount = input[5].value;
+  let description = input[3].value;
+  let category = select[1].value;
 
+  if (
+    date === "" ||
+    amount === "" ||
+    category === "" ||
+    description === "" ||
+    date == "Invalid Date"
+  ) {
+    showToast("Please fill valid inputs!", "danger", 5000);
+  } else {
+    for (let index = 0; index < transactions.length; index++) {
+      console.log(idToBeChanged);
+      if (transactions[index].id === idToBeChanged) {
+        transactions[index].amount = parseInt(amount);
+        transactions[index].category = category;
+        transactions[index].date = date;
+        transactions[index].description = description;
+        container.classList.add("hide");
+        editPopup.classList.add("hide");
+        input[4].value = "";
+        input[5].value = "";
+        input[3].value = "";
+        select[1].value = "";
+        showToast("Transaction Successfully Completed", "error", 5000);
+        reRun();
+        if (
+          transactions[index].date.getMonth() === new Date().getMonth() &&
+          transactions[index].date.getFullYear() === new Date().getFullYear()
+        ) {
+          helper[transactions[index].category.toLowerCase()] +=
+            transactions[index].amount;
+          reRun();
+        }
+        localStorage.setItem("transactions", JSON.stringify(transactions));
+        return;
+      }
+    }
+    reRun();
+  }
+});
 const deleteTransaction = function (id) {
+  showToast("Deleted Successfully", "danger", 5000);
   transactions.forEach(function (transaction, index) {
     if (transaction.id === id) {
       console.log(transactions);
@@ -350,15 +274,17 @@ const deleteTransaction = function (id) {
         helper[transaction.category.toLowerCase()] -= transaction.amount;
         reRun();
       }
+      localStorage.setItem("transactions", JSON.stringify(transactions));
     }
+    reRun();
   });
 };
 const currentMonthUsage = function () {
   let total = 0;
   transactions.forEach(function (transaction) {
     if (
-      transaction.date.getMonth() === new Date().getMonth() &&
-      transaction.date.getFullYear() === new Date().getFullYear()
+      new Date(transaction.date).getMonth() === new Date().getMonth() &&
+      new Date(transaction.date).getFullYear() === new Date().getFullYear()
     ) {
       total += transaction.amount;
     }
@@ -381,6 +307,7 @@ expenditureThisMonthContainer.innerHTML = `${currentMonthUsage()}`;
 totalUsageContainer.innerHTML = `${totalUsage()}`;
 
 function reRun() {
+  transactions.sort((a, b) => b.date - a.date);
   transactionList.innerHTML = "";
   transactions.forEach(function (transaction) {
     addTransactionDOM(transaction);
