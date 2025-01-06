@@ -6,7 +6,14 @@ const totalUsageContainer = document.getElementById("expenditureTotal");
 const expenditurePercentageThisMonthContainer = document.getElementById(
   "expenditurePercentageThisMonth"
 );
+const addExpenseButon = document.getElementById("addExpense");
+const container = document.getElementById("container");
+const closeBtn = document.getElementById("close");
+const addBtn = document.getElementById("add");
+const input = document.getElementsByTagName("input");
+const select = document.getElementsByTagName("select");
 
+// ---------------------MODAL---------------------
 let count = 504;
 const transactions = [
   {
@@ -122,6 +129,13 @@ const transactions = [
     description: "New Year's Day dinner",
   },
   {
+    id: 45,
+    date: new Date("2025-01-01"),
+    amount: 2000,
+    category: "Medical",
+    description: "New Year's Day dinner",
+  },
+  {
     id: 36,
     date: new Date("2025-01-02"),
     amount: 800,
@@ -165,6 +179,64 @@ const transactions = [
   },
 ];
 transactions.sort((a, b) => b.date - a.date);
+
+addBtn.addEventListener("click", function () {
+  let date = new Date(input[1].value);
+  let amount = input[2].value;
+  let description = input[0].value;
+  let category = select[0].value;
+  console.log(date, amount, description, category);
+
+  if (
+    date === "" ||
+    amount === "" ||
+    category === "" ||
+    description === "" ||
+    date == "Invalid Date"
+  ) {
+    showToast("Please fill all the fields", "danger", 5000);
+  } else {
+    transactions.push({
+      id: count++,
+      date: date,
+      amount: parseInt(amount),
+      category: category,
+      description: description,
+    });
+    addTransactionDOM({
+      id: count,
+      date: new Date(date),
+      amount: amount,
+      category: category,
+      description: description,
+    });
+    if (
+      new Date(date).getMonth() === new Date().getMonth() &&
+      new Date(date).getFullYear() === new Date().getFullYear()
+    ) {
+      helper[category.toLowerCase()] += parseInt(amount);
+    }
+
+    transactions.sort((a, b) => b.date - a.date);
+    reRun();
+    container.classList.add("hide");
+    input[0].value = "";
+    input[1].value = "";
+    input[2].value = "";
+    showToast("Transaction Successfully Completed", "success", 5000);
+  }
+});
+container.addEventListener("click", function (e) {
+  if (e.target === container) {
+    container.classList.add("hide");
+  }
+});
+closeBtn.addEventListener("click", function (e) {
+  container.classList.add("hide");
+});
+addExpenseButon.addEventListener("click", function () {
+  container.classList.remove("hide");
+});
 function addTransactionDOM(transaction) {
   const item = document.createElement("div");
   item.innerHTML = `
@@ -369,3 +441,66 @@ function explodePie(e) {
   }
   e.chart.render();
 }
+
+// ---------------------TOAST---------------------
+
+let icon = {
+  success: '<span class="material-symbols-outlined"></span>',
+  danger: '<span class="material-symbols-outlined"></span>',
+  warning: '<span class="material-symbols-outlined"></span>',
+  info: '<span class="material-symbols-outlined"></span>',
+};
+
+const showToast = (
+  message = "Sample Message",
+  toastType = "info",
+  duration = 5000
+) => {
+  if (!Object.keys(icon).includes(toastType)) toastType = "info";
+
+  let box = document.createElement("div");
+  box.classList.add("toast", `toast-${toastType}`);
+  box.innerHTML = ` <div class="toast-content-wrapper">
+                      <div class="toast-icon">
+                      ${icon[toastType]}
+                      </div>
+                      <div class="toast-message">${message}</div>
+                      <div class="toast-progress"></div>
+                      </div>`;
+  duration = duration || 5000;
+  box.querySelector(".toast-progress").style.animationDuration = `${
+    duration / 1000
+  }s`;
+
+  let toastAlready = document.body.querySelector(".toast");
+  if (toastAlready) {
+    toastAlready.remove();
+  }
+
+  document.body.appendChild(box);
+};
+
+let submit = document.querySelector(".add");
+let information = document.querySelector(".add1");
+let failed = document.querySelector(".custom-toast.danger-toast");
+let warn = document.querySelector(".custom-toast.warning-toast");
+
+// submit.addEventListener("click", (e) => {
+//   e.preventDefault();
+//   showToast("Transaction Added Successfully", "success", 5000);
+// });
+
+// information.addEventListener("click", (e) => {
+//   e.preventDefault();
+//   showToast("Do POTD and Earn Coins", "info", 5000);
+// });
+
+// failed.addEventListener("click", (e) => {
+//   e.preventDefault();
+//   showToast("Failed unexpected error", "danger", 5000);
+// });
+
+// warn.addEventListener("click", (e) => {
+//   e.preventDefault();
+//   showToast("!warning! server error", "warning", 5000);
+// });
