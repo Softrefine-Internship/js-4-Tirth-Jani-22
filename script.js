@@ -257,6 +257,7 @@ editBtn.addEventListener("click", function () {
     reRun();
   }
 });
+const addCategory = function () {};
 const deleteTransaction = function (id) {
   showToast("Deleted Successfully", "danger", 5000);
   transactions.forEach(function (transaction, index) {
@@ -354,6 +355,8 @@ window.onload = function () {
       },
     ],
   });
+  console.log(chart);
+
   chart.render();
 };
 
