@@ -16,156 +16,234 @@ const select = document.getElementsByTagName("select");
 const editPopup = document.getElementById("editPopup");
 const addPopup = document.getElementById("addPopup");
 const showMe = document.getElementById("showMe");
+const addCategoryBtn = document.getElementsByClassName("addcategory");
+const addCategoryPopup = document.getElementById("categoryPopup");
+const addCategoryAddBtn = document.getElementById("addCategoryBtn");
+const closeCategory = document.getElementById("closeC");
 
 // ---------------------MODAL---------------------
+addCategoryBtn[0].addEventListener("click", function (e) {
+  container.classList.remove("hide");
+  addCategoryPopup.classList.remove("hide");
+});
+closeCategory.addEventListener("click", function () {
+  container.classList.add("hide");
+  addCategoryPopup.classList.add("hide");
+});
+addCategoryAddBtn.addEventListener("click", function () {
+  let newCategory = input[input.length - 1].value;
+  newCategory = `${
+    String(newCategory).charAt(0).toUpperCase() + String(newCategory).slice(1)
+  }`;
+  helper[newCategory] = 0;
+  x.push({ y: helper[newCategory], name: newCategory });
+  console.log(newCategory);
+  input[input.length - 1].value = "";
+  localStorage.setItem("x", JSON.stringify(x));
+  localStorage.setItem("helper", JSON.stringify(helper));
+  let newOption = document.createElement("option");
+  newOption.textContent = newCategory;
+  newOption.value = newCategory;
+  select[0].appendChild(newOption);
+  newOption = document.createElement("option");
+  newOption.textContent = newCategory;
+  newOption.value = newCategory;
+  select[1].appendChild(newOption);
+  console.log(select[1]);
+  newOption = document.createElement("option");
+  newOption.textContent = newCategory;
+  newOption.value = newCategory;
+
+  select[2].appendChild(newOption);
+  console.log(select[2]);
+  container.classList.add("hide");
+  addCategoryPopup.classList.add("hide");
+  window.onload();
+  reRun();
+});
 let count = 504;
 
-let transactions = JSON.parse(localStorage.getItem("transactions"));
-
-if (!transactions) {
-  transactions = [
-    {
-      id: 14,
-      date: "2023-06-18T00:00:00.000Z",
-      amount: 750,
-      category: "Travel",
-      description: "Bus tickets",
-    },
-    {
-      id: 15,
-      date: "2024-02-01T00:00:00.000Z",
-      amount: 1500,
-      category: "Medical",
-      description: "Car loan payment",
-    },
-    {
-      id: 17,
-      date: "2023-07-14T00:00:00.000Z",
-      amount: 100,
-      category: "Others",
-      description: "Charity donation",
-    },
-    {
-      id: 18,
-      date: "2023-02-28T00:00:00.000Z",
-      amount: 300,
-      category: "Bills",
-      description: "Water bill payment",
-    },
-    {
-      id: 19,
-      date: "2024-01-10T00:00:00.000Z",
-      amount: 1200,
-      category: "Travel",
-      description: "Hotel stay booking",
-    },
-    {
-      id: 20,
-      date: "2022-06-22T00:00:00.000Z",
-      amount: 850,
-      category: "Debt",
-      description: "Student loan payment",
-    },
-    {
-      id: 21,
-      date: "2025-01-04T18:30:00.000Z",
-      amount: 500,
-      category: "Others",
-      description: "Flight tickets to Paris",
-    },
-    {
-      id: 22,
-      date: "2025-01-03T00:00:00.000Z",
-      amount: 300,
-      category: "Food",
-      description: "Lunch at a local café",
-    },
-    {
-      id: 23,
-      date: "2025-01-01T00:00:00.000Z",
-      amount: 600,
-      category: "Bills",
-      description: "Internet bill payment",
-    },
-    {
-      id: 24,
-      date: "2025-01-02T00:00:00.000Z",
-      amount: 1200,
-      category: "Debt",
-      description: "Credit card payment",
-    },
-    {
-      id: 25,
-      date: "2024-01-01T00:00:00.000Z",
-      amount: 150,
-      category: "Others",
-      description: "Charity donation",
-    },
-    {
-      id: 26,
-      date: "2024-12-15T00:00:00.000Z",
-      amount: 500,
-      category: "Travel",
-      description: "Hotel booking for business trip",
-    },
-    {
-      id: 27,
-      date: new Date("2024-07-01"),
-      amount: 700,
-      category: "Food",
-      description: "Weekly grocery shopping",
-    },
-    {
-      id: 35,
-      date: new Date("2025-01-01"),
-      amount: 500,
-      category: "Food",
-      description: "New Year's Day dinner",
-    },
-    {
-      id: 45,
-      date: new Date("2025-01-01"),
-      amount: 2000,
-      category: "Medical",
-      description: "New Year's Day dinner",
-    },
-    {
-      id: 36,
-      date: new Date("2025-01-02"),
-      amount: 800,
-      category: "Travel",
-      description: "Train tickets to a nearby city",
-    },
-    {
-      id: 38,
-      date: new Date("2025-01-06"),
-      amount: 1200,
-      category: "Debt",
-      description: "Student loan payment",
-    },
-    {
-      id: 39,
-      date: new Date("2025-01-09"),
-      amount: 150,
-      category: "Others",
-      description: "Donation to a charity",
-    },
-    {
-      id: 40,
-      date: new Date("2025-01-11"),
-      amount: 700,
-      category: "Food",
-      description: "Groceries for the week",
-    },
-    {
-      id: 41,
-      date: new Date("2025-01-15"),
-      amount: 2200,
-      category: "Travel",
-      description: "Booking for international trip",
-    },
-  ];
+const helper = JSON.parse(localStorage.getItem("helper")) || {
+  travel: 100,
+  medical: 300,
+  debt: 400,
+  bills: 500,
+  food: 60,
+  others: 700,
+};
+for (let i = 0; i < select.length; i++) {
+  select[i].innerHTML = "";
+  if (i == 2) {
+    let newOption = document.createElement("option");
+    newOption.textContent = "All";
+    newOption.value = "All";
+    select[i].appendChild(newOption);
+  }
+  for (const key in helper) {
+    let newOption = document.createElement("option");
+    newOption.textContent = `${
+      String(key).charAt(0).toUpperCase() + String(key).slice(1)
+    }`;
+    newOption.value = `${
+      String(key).charAt(0).toUpperCase() + String(key).slice(1)
+    }`;
+    select[i].appendChild(newOption);
+  }
 }
+
+let x = JSON.parse(localStorage.getItem("x")) || [
+  { y: helper.travel, name: "Travel", exploded: true },
+  { y: helper.medical, name: "Medical" },
+  { y: helper.debt, name: "Debt" },
+  { y: helper.bills, name: "Bills" },
+  { y: helper.food, name: "Food" },
+  { y: helper.others, name: "Others" },
+];
+localStorage.setItem("x", JSON.stringify(x));
+localStorage.setItem("helper", JSON.stringify(helper));
+let transactions = JSON.parse(localStorage.getItem("transactions")) || [
+  {
+    id: 14,
+    date: "2023-06-18T00:00:00.000Z",
+    amount: 750,
+    category: "Travel",
+    description: "Bus tickets",
+  },
+  {
+    id: 15,
+    date: "2024-02-01T00:00:00.000Z",
+    amount: 1500,
+    category: "Medical",
+    description: "Car loan payment",
+  },
+  {
+    id: 17,
+    date: "2023-07-14T00:00:00.000Z",
+    amount: 100,
+    category: "Others",
+    description: "Charity donation",
+  },
+  {
+    id: 18,
+    date: "2023-02-28T00:00:00.000Z",
+    amount: 300,
+    category: "Bills",
+    description: "Water bill payment",
+  },
+  {
+    id: 19,
+    date: "2024-01-10T00:00:00.000Z",
+    amount: 1200,
+    category: "Travel",
+    description: "Hotel stay booking",
+  },
+  {
+    id: 20,
+    date: "2022-06-22T00:00:00.000Z",
+    amount: 850,
+    category: "Debt",
+    description: "Student loan payment",
+  },
+  {
+    id: 21,
+    date: "2025-01-04T18:30:00.000Z",
+    amount: 500,
+    category: "Others",
+    description: "Flight tickets to Paris",
+  },
+  {
+    id: 22,
+    date: "2025-01-03T00:00:00.000Z",
+    amount: 300,
+    category: "Food",
+    description: "Lunch at a local café",
+  },
+  {
+    id: 23,
+    date: "2025-01-01T00:00:00.000Z",
+    amount: 600,
+    category: "Bills",
+    description: "Internet bill payment",
+  },
+  {
+    id: 24,
+    date: "2025-01-02T00:00:00.000Z",
+    amount: 1200,
+    category: "Debt",
+    description: "Credit card payment",
+  },
+  {
+    id: 25,
+    date: "2024-01-01T00:00:00.000Z",
+    amount: 150,
+    category: "Others",
+    description: "Charity donation",
+  },
+  {
+    id: 26,
+    date: "2024-12-15T00:00:00.000Z",
+    amount: 500,
+    category: "Travel",
+    description: "Hotel booking for business trip",
+  },
+  {
+    id: 27,
+    date: "2024-10-15T00:00:00.000Z",
+    amount: 700,
+    category: "Food",
+    description: "Weekly grocery shopping",
+  },
+  {
+    id: 35,
+    date: "2022-12-15T00:00:00.000Z",
+    amount: 500,
+    category: "Food",
+    description: "New Year's Day dinner",
+  },
+  {
+    id: 45,
+    date: "2020-12-15T00:00:00.000Z",
+    amount: 2000,
+    category: "Medical",
+    description: "New Year's Day dinner",
+  },
+  {
+    id: 36,
+    date: "2019-12-15T00:00:00.000Z",
+    amount: 800,
+    category: "Travel",
+    description: "Train tickets to a nearby city",
+  },
+  {
+    id: 38,
+    date: "2014-12-15T00:00:00.000Z",
+    amount: 1200,
+    category: "Debt",
+    description: "Student loan payment",
+  },
+  {
+    id: 39,
+    date: "2024-12-15T00:00:00.000Z",
+    amount: 150,
+    category: "Others",
+    description: "Donation to a charity",
+  },
+  {
+    id: 40,
+    date: "2024-12-15T00:00:00.000Z",
+    amount: 700,
+    category: "Food",
+    description: "Groceries for the week",
+  },
+  {
+    id: 41,
+    date: "2024-12-15T00:00:00.000Z",
+    amount: 2200,
+    category: "Travel",
+    description: "Booking for international trip",
+  },
+];
+
 transactions.sort((a, b) => b.date - a.date);
 addBtn.addEventListener("click", function () {
   let date = new Date(input[1].value).toISOString();
@@ -202,8 +280,19 @@ addBtn.addEventListener("click", function () {
       new Date(date).getFullYear() === new Date().getFullYear()
     ) {
       helper[category.toLowerCase()] += parseInt(amount);
+      localStorage.setItem("helper", JSON.stringify(helper));
     }
-
+    if (!x) {
+      x = [
+        { y: helper.travel, name: "Travel", exploded: true },
+        { y: helper.medical, name: "Medical" },
+        { y: helper.debt, name: "Debt" },
+        { y: helper.bills, name: "Bills" },
+        { y: helper.food, name: "Food" },
+        { y: helper.others, name: "Others" },
+      ];
+      localStorage.setItem("x", JSON.stingify(x));
+    }
     transactions.sort((a, b) => b.date - a.date);
     reRun();
     container.classList.add("hide");
@@ -216,6 +305,9 @@ addBtn.addEventListener("click", function () {
 container.addEventListener("click", function (e) {
   if (e.target === container) {
     container.classList.add("hide");
+    addCategoryPopup.classList.add("hide");
+    editPopup.classList.add("hide");
+    addPopup.classList.add("hide");
   }
 });
 // closeBtn.forEach((e) => {
@@ -230,9 +322,6 @@ closeBtn[1].addEventListener("click", function (e) {
   addPopup.classList.add("hide");
   editPopup.classList.add("hide");
 });
-
-// });
-// console.log(closeBtn[0]);
 
 addExpenseButon.addEventListener("click", function () {
   container.classList.remove("hide");
@@ -319,14 +408,6 @@ function addTransactionDOM(transaction) {
     `;
   transactionList.appendChild(item);
 }
-const helper = {
-  travel: 0,
-  medical: 0,
-  debt: 0,
-  bills: 0,
-  food: 0,
-  others: 0,
-};
 
 transactions.forEach(function (transaction) {
   if (
@@ -334,6 +415,7 @@ transactions.forEach(function (transaction) {
     new Date(transaction.date).getFullYear() === new Date().getFullYear()
   ) {
     helper[transaction.category.toLowerCase()] += transaction.amount;
+    localStorage.setItem("helper", JSON.stringify(helper));
   }
   addTransactionDOM(transaction);
 });
@@ -349,10 +431,12 @@ const editTransaction = function (a) {
       select[1].value = e.category;
       idToBeChanged = e.id;
       if (
-        e.date.getMonth() === new Date().getMonth() &&
-        e.date.getFullYear() === new Date().getFullYear()
+        new Date(e.date).getMonth() === new Date().getMonth() &&
+        new Date(e.date).getFullYear() === new Date().getFullYear()
       ) {
         helper[e.category.toLowerCase()] -= e.amount;
+
+        localStorage.setItem("helper", JSON.stringify(helper));
       }
     }
   });
@@ -402,7 +486,6 @@ editBtn.addEventListener("click", function () {
     reRun();
   }
 });
-const addCategory = function () {};
 const deleteTransaction = function (id) {
   showToast("Deleted Successfully", "danger", 5000);
   transactions.forEach(function (transaction, index) {
@@ -415,10 +498,11 @@ const deleteTransaction = function (id) {
         addTransactionDOM(transaction);
       });
       if (
-        transaction.date.getMonth() === new Date().getMonth() &&
-        transaction.date.getFullYear() === new Date().getFullYear()
+        new Date(transaction.date).getMonth() === new Date().getMonth() &&
+        new Date(transaction.date).getFullYear() === new Date().getFullYear()
       ) {
         helper[transaction.category.toLowerCase()] -= transaction.amount;
+        localStorage.setItem("helper", JSON.stringify(helper));
         reRun();
       }
     }
@@ -463,6 +547,8 @@ function reRun() {
   )}`;
   expenditureThisMonthContainer.innerHTML = `${currentMonthUsage()}`;
   totalUsageContainer.innerHTML = `${totalUsage()}`;
+  localStorage.setItem("x", JSON.stringify(x));
+  localStorage.setItem("helper", JSON.stringify(helper));
   window.onload();
 }
 
@@ -485,6 +571,8 @@ showMe.addEventListener("change", function (e) {
 
 // PIE-CHART
 window.onload = function () {
+  console.log("x is", x);
+
   const month = new Date().toLocaleString("default", { month: "long" });
   var chart = new CanvasJS.Chart("chartContainer", {
     exportEnabled: true,
@@ -506,19 +594,11 @@ window.onload = function () {
         toolTipContent: "{name}: <strong>₹ {y}</strong>",
         indexLabel: "{name} - ₹ {y}",
         indexLabelFontColor: "#b4bcc3",
-        dataPoints: [
-          { y: helper.travel, name: "Travel", exploded: true },
-          { y: helper.medical, name: "Medical" },
-          { y: helper.debt, name: "Debt" },
-          { y: helper.bills, name: "Bills" },
-          { y: helper.food, name: "Food" },
-          { y: helper.others, name: "Others" },
-        ],
+        dataPoints: x,
       },
     ],
   });
   console.log(chart);
-
   chart.render();
 };
 
